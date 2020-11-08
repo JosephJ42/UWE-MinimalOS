@@ -86,7 +86,7 @@ void terminal_putentryat(char c, uint8_t color, size_t x, size_t y) {
 
 //A new function that will support terminal scrolling.
 //It navigates through the terminal_buffer array,
-//then shifts the each characture by 80 places in the array
+//then shifts each characture by 80 places in the array (one row)
 //creating a scrolling effect.
 
 void terminal_scrolling(){
@@ -97,8 +97,8 @@ void terminal_scrolling(){
 
 void terminal_putchar(char c) {
 
-	//The following code allows the for the support of the new line characture '\n' 
-	//As well as the implementation of the scrolling feature
+	//The following code allows the for the support of the new line characture '\n', 
+	//as well as the implementation of the scrolling feature
 
 	if (c == '\n'){
 		if (++terminal_row == VGA_HEIGHT) {      		

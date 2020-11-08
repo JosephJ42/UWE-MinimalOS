@@ -140,7 +140,7 @@ void kernel_main() {
    * yet, '\n' will produce some VGA specific character instead.
    * This is normal.
    */
-  terminal_setcolor(4); // testing the colours (the method used is not efficent)
+  terminal_setcolor(4); // testing the colours (the method used is not efficient)
   terminal_writestring("Hello00, kernel World!\n");
   terminal_setcolor(15); 
   terminal_writestring("Hello01, kernel World!\n");

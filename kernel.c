@@ -84,7 +84,10 @@ void terminal_putentryat(char c, uint8_t color, size_t x, size_t y) {
   terminal_buffer[index] = make_vgaentry(c, color);
 }
 
-//A new function that will support terminal scrolling
+//A new function that will support terminal scrolling.
+//It navigates through the terminal_buffer array,
+//then shifts the each characture by 80 places in the array
+//creating a scrolling effect.
 
 void terminal_scrolling(){
 	for (int i=0; i < (VGA_HEIGHT * VGA_WIDTH); i++){
@@ -92,36 +95,30 @@ void terminal_scrolling(){
 		}
 	}
 
-
-
 void terminal_putchar(char c) {
 
-//The following code allows the for the support of the new line characture '\n' 
-//As well as the implentation of the scrolling feature
+	//The following code allows the for the support of the new line characture '\n' 
+	//As well as the implementation of the scrolling feature
 
-  if (c == '\n'){ //when the '\n' is present increment the terminal row (making a new line) & reset terminal column to 0
-   //terminal_row++;
-
-	if (++terminal_row == VGA_HEIGHT) {
-		//terminal_row = 0;      		
-		terminal_scrolling();
-		terminal_row--;
+	if (c == '\n'){
+		if (++terminal_row == VGA_HEIGHT) {      		
+			terminal_scrolling();
+			terminal_row--;
     		}
-
-   terminal_column = 0;
-  }	
-  else{
-  terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
-  //terminal_scrolling();
-  
-  	if (++terminal_column == VGA_WIDTH) {
-   	 terminal_column = 0;
-    
-  		if (++terminal_row == VGA_HEIGHT) {
-      		terminal_row = 0;
-    		}
+	terminal_column = 0;
 	}
-  }
+	
+	else{
+	terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
+  
+  		if (++terminal_column == VGA_WIDTH) {
+			terminal_column = 0;
+    
+  			if (++terminal_row == VGA_HEIGHT) {
+      			terminal_row = 0;
+    			}
+		}
+ 	 }
 }
 
 

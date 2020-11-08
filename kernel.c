@@ -84,26 +84,48 @@ void terminal_putentryat(char c, uint8_t color, size_t x, size_t y) {
   terminal_buffer[index] = make_vgaentry(c, color);
 }
 
+//A new function that will support terminal scrolling
+
+void terminal_scrolling(){
+	for (int i=0; i < (VGA_HEIGHT * VGA_WIDTH); i++){
+		terminal_buffer[i] = terminal_buffer[i + 80];
+		}
+	}
+
+
+
 void terminal_putchar(char c) {
 
-/*  The following code allows the for the support of the new line characture '\n' 
-*/
-  if (c == '\n'){ //when the '\n' is present increment the terminal row & reset terminal column to 0
-   terminal_row++;
+//The following code allows the for the support of the new line characture '\n' 
+//As well as the implentation of the scrolling feature
+
+  if (c == '\n'){ //when the '\n' is present increment the terminal row (making a new line) & reset terminal column to 0
+   //terminal_row++;
+
+	if (++terminal_row == VGA_HEIGHT) {
+		//terminal_row = 0;      		
+		terminal_scrolling();
+		terminal_row--;
+    		}
+
    terminal_column = 0;
-  }
+  }	
   else{
-
-
   terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
-  if (++terminal_column == VGA_WIDTH) {
-    terminal_column = 0;
-    if (++terminal_row == VGA_HEIGHT) {
-      terminal_row = 0;
-    }
+  //terminal_scrolling();
+  
+  	if (++terminal_column == VGA_WIDTH) {
+   	 terminal_column = 0;
+    
+  		if (++terminal_row == VGA_HEIGHT) {
+      		terminal_row = 0;
+    		}
+	}
   }
 }
-}
+
+
+
 void terminal_writestring(const char* data) {
   size_t datalen = strlen(data);
   for (size_t i = 0; i < datalen; i++)
@@ -121,13 +143,16 @@ void kernel_main() {
    * yet, '\n' will produce some VGA specific character instead.
    * This is normal.
    */
+  terminal_setcolor(4); // testing the colours (the method used is not efficent)
   terminal_writestring("Hello00, kernel World!\n");
+  terminal_setcolor(15); 
   terminal_writestring("Hello01, kernel World!\n");
   terminal_writestring("Hello02, kernel World!\n");
   terminal_writestring("Hello03, kernel World!\n");
   terminal_writestring("Hello04, kernel World!\n");
   terminal_writestring("Hello05, kernel World!\n");
   terminal_writestring("Hello06, kernel World!\n");
+  terminal_setcolor(1);
   terminal_writestring("Hello07, kernel World!\n");
   terminal_writestring("Hello08, kernel World!\n");
   terminal_writestring("Hello09, kernel World!\n");
@@ -146,6 +171,7 @@ void kernel_main() {
   terminal_writestring("Hello22, kernel World!\n");
   terminal_writestring("Hello23, kernel World!\n");
   terminal_writestring("Hello24, kernel World!\n");
+  terminal_setcolor(2);
   terminal_writestring("Hello25, kernel World!\n");
   terminal_writestring("Hello26, kernel World!\n");
   terminal_writestring("Hello27, kernel World!\n");
